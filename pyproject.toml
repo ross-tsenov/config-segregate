@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "python-project-template"
+name = "pydantic-config-cascade"
 version = "0.0.1"
-description = "Description."
+description = "Pydantic-Config-Cascade simplifies Config management with Pydantic, enabling efficient, customizable configurations through classifier-based loading."
 license = "MIT"
-authors = ["Author <author@author.com>"]
-maintainers = ["Author <author@author.com>"]
-repository = "https://github.com/ross-tsenov/python-project-template"
-documentation = "https://github.com/ross-tsenov/python-project-template/tree/main/docs/"
+authors = ["Ross Tsenov <ross.tsenov@github.com>"]
+maintainers = ["Ross Tsenov <ross.tsenov@github.com>"]
+repository = "https://github.com/ross-tsenov/pydantic-config-cascade"
+documentation = "https://github.com/ross-tsenov/pydantic-config-cascade/tree/main/docs/"
 readme = "README.md"
 include = [
-    "src",
+    "pydantic_config_cascade",
 ]
 exclude = [
     "docs/*",
@@ -18,9 +18,8 @@ exclude = [
 
 
 [tool.poetry.dependencies]
-python = "^3.10.1"
-python-dotenv = "^1.0.0"
-pydantic-settings = "^2.2.1"
+python = "^3.8.1"
+pydantic-settings = "^2.0.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -108,9 +107,6 @@ pretty = true
 follow_imports="silent"
 ignore_missing_imports = true
 show_error_codes = true
-exclude = [
-    "__init__.py",
-]
 
 
 [tool.pytest.ini_options]
