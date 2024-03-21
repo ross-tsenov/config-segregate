@@ -1,0 +1,131 @@
+[tool.poetry]
+name = "python-project-template"
+version = "0.0.1"
+description = "Description."
+license = "MIT"
+authors = ["Author <author@author.com>"]
+maintainers = ["Author <author@author.com>"]
+repository = "https://github.com/ross-tsenov/python-project-template"
+documentation = "https://github.com/ross-tsenov/python-project-template/tree/main/docs/"
+readme = "README.md"
+include = [
+    "src",
+]
+exclude = [
+    "docs/*",
+    "tests/*",
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.10.1"
+python-dotenv = "^1.0.0"
+pydantic-settings = "^2.2.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.285"
+mypy = "^1.8.0"
+pytest = "^7.4.4"
+pre-commit = "^3.6.2"
+
+
+[tool.poetry.group.docs]
+optional = true
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.5.13"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+line-length = 122
+target-version = "py310"
+select = [
+    "A",
+    "B",
+    "E",
+    "F",
+    "G",
+    "I",
+    "N",
+    "W",
+    "Q",
+    "S",
+    "UP",
+    "C9",
+    "PT",
+    "ANN",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "SIM",
+]
+
+
+[tool.ruff.per-file-ignores]
+"**/tests/*" = ["S101", "SIM117"]
+"*init*.py" = ["F401"]
+
+
+[tool.ruff.isort]
+combine-as-imports = true
+force-wrap-aliases = true
+
+
+[tool.ruff.pylint]
+max-args = 8
+max-branches = 25
+max-returns = 9
+max-statements = 30
+
+
+[tool.isort]
+profile = "black"
+line_length=122
+multi_line_output=3
+use_parentheses=true
+include_trailing_comma=true
+lines_between_types=1
+
+
+[tool.mypy]
+warn_no_return = true
+disallow_subclassing_any = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+allow_redefinition = true
+pretty = true
+follow_imports="silent"
+ignore_missing_imports = true
+show_error_codes = true
+exclude = [
+    "__init__.py",
+]
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = """
+-ra \
+-q \
+--verbose \
+--maxfail=1 \
+--color=yes """
+testpaths = ["tests/"]
+python_files = ["*_test.py"]
+python_functions = ["test_*"]
+render_collapsed = true
+filterwarnings = [
+    "ignore",
+    "default:::mymodule",
+]

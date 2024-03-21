@@ -1,0 +1,64 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+{
+    "name": "python-project-template",
+    "context": "..",
+    "dockerFile": "./Dockerfile",
+    "runArgs": [
+		// "--cpus=1.0",
+        // "--memory=1g",
+        // "--ipc=host",
+        // "--privileged",
+        // "--net=host"
+    ],
+    "mounts": [
+		// {
+		// 	"source": "${localEnv:HOME}",
+		// 	"target": "${localEnv:HOME}",
+		// 	"type": "bind"
+		// }
+    ],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-azuretools.vscode-docker",
+				"njpwerner.autodocstring",
+				"streetsidesoftware.code-spell-checker",
+				"tamasfe.even-better-toml",
+				"donjayamanne.githistory",
+				"eamodio.gitlens",
+				"oderwat.indent-rainbow",
+				"KevinRose.vsc-python-indent",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"VisualStudioExptTeam.intellicode-api-usage-examples",
+				"yzhang.markdown-all-in-one",
+				"donjayamanne.python-environment-manager",
+				"redhat.vscode-yaml"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/home/vscode/project-py-env/bin/python"
+			}
+		}
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [],
+
+	// Uncomment the next line to run commands after the container is created.
+	// "postCreateCommand": "cat /etc/os-release",
+
+	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "devcontainer"
+	"remoteUser": "vscode",
+	"overrideCommand": true,
+	"build": {
+        "args": {
+            "PROJECT_NAME": "python-project-template"
+        }
+    },
+	"onCreateCommand": "pre-commit install-hooks"
+}

@@ -1,0 +1,26 @@
+site_name: Project Documentation
+repo_url: https://github.com/ross-tsenov/python-project-template
+repo_name: python-project-template
+theme:
+  name: material
+  language: en
+  logo: assets/logo.jpg
+  favicon: assets/logo.jpg
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    primary: black
+    accent: deep purple
+    font:
+      text: Roboto
+      code: Roboto Mono
+  features:
+    - navigation.top
+    - navigation.sections
+    - navigation.instant
+    - content.code.annotate
+
+nav:
+  - Introduction: index.md
+  - Getting Started:
+    - Installation: getting_started/installation.md
