@@ -46,7 +46,7 @@ jobs:
     - name: Linting pydantic_config_cascade and tests dirs with ruff
       run: |
         source $VENV
-        ruff check pydantic_config_cascade tests
+        poetry run ruff check pydantic_config_cascade tests
 
 
   typing:
