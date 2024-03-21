@@ -23,7 +23,7 @@ pydantic-settings = "^2.0.3"
 
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.3.0"
+ruff = "^0.0.285"
 mypy = "^1.9.0"
 pytest = "^8.1.1"
 pre-commit = "^3.5.0"
