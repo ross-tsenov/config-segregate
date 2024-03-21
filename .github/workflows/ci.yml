@@ -43,10 +43,10 @@ jobs:
       run: |
         poetry install --no-interaction
 
-    - name: Linting src and tests dirs with ruff
+    - name: Linting pydantic_config_cascade and tests dirs with ruff
       run: |
         source $VENV
-        ruff check src tests
+        ruff check pydantic_config_cascade tests
 
 
   typing:
@@ -86,7 +86,7 @@ jobs:
     - name: Static type checking with mypy
       run: |
         source $VENV
-        mypy --show-column-numbers --install-types --non-interactive src tests
+        mypy --show-column-numbers --install-types --non-interactive pydantic_config_cascade tests
 
 
   tests:
