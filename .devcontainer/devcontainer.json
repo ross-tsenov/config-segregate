@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-    "name": "python-project-template",
+    "name": "pydantic-config-cascade",
     "context": "..",
     "dockerFile": "./Dockerfile",
     "runArgs": [
@@ -57,7 +57,7 @@
 	"overrideCommand": true,
 	"build": {
         "args": {
-            "PROJECT_NAME": "python-project-template"
+            "PROJECT_NAME": "pydantic-config-cascade"
         }
     },
 	"onCreateCommand": "pre-commit install-hooks"

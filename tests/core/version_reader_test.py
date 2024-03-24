@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from src import get_version_from_pyproject
+from pydantic_config_cascade import get_version_from_pyproject
 
 
 @pytest.fixture()

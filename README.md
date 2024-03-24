@@ -22,13 +22,10 @@ This Python Project Template is designed to streamline the development process, 
 - `docs/`: Holds MkDocs structured documentation, serving as the home for project documentation.
   - `docs/assets/`: Stores images and other assets for the documentation.
 - `scripts/`: Typically includes utility bash scripts.
-- `src/`: The primary directory for project source code.
-  - `src/settings.py`: Manages application settings loaded and validated from `.env`.
-  - `src/logger.py`: Provides a global logger accessible throughout the project.
+- `pydantic_config_cascade/`: The primary directory for project source code.
 - `tests/`: Contains test cases and fixtures for the project.
   - `tests/conftest.py`: Defines reusable pytest fixtures.
-  - `tests/core.py`: Tests core functionalities like settings and logging.
-- `.env.sample`: An example `.env` file outlining required environment variables.
+  - `tests/core`: Tests core functionalities like settings and logging.
 - `.gitignore`: Specifies intentionally untracked files to ignore.
 - `.pre-commit-config.yaml`: Configures checks to run before commits.
 - `main.py`: The entry point for running the application.
@@ -62,7 +59,7 @@ Sure, here are the useful commands with code blocks for better readability:
 
   Run type checking:
   ```bash
-  mypy src/ tests/
+  mypy pydantic_config_cascade/ tests/
   ```
 
 - **Pytest Commands**

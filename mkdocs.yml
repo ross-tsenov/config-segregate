@@ -1,6 +1,6 @@
-site_name: Project Documentation
-repo_url: https://github.com/ross-tsenov/python-project-template
-repo_name: python-project-template
+site_name: Pydantic-Config-Cascade Documentation
+repo_url: https://github.com/ross-tsenov/pydantic-config-cascade
+repo_name: pydantic-config-cascade
 theme:
   name: material
   language: en

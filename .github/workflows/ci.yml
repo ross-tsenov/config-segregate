@@ -41,12 +41,12 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cachfe-hit != 'true'
       run: |
-        poetry install --no-interaction
+        poetry install --no-interaction --with dev
 
-    - name: Linting src and tests dirs with ruff
+    - name: Linting pydantic_config_cascade and tests dirs with ruff
       run: |
         source $VENV
-        ruff check src tests
+        poetry run ruff check pydantic_config_cascade tests
 
 
   typing:
@@ -86,7 +86,7 @@ jobs:
     - name: Static type checking with mypy
       run: |
         source $VENV
-        mypy --show-column-numbers --install-types --non-interactive src tests
+        mypy --show-column-numbers --install-types --non-interactive pydantic_config_cascade tests
 
 
   tests:
