@@ -41,7 +41,7 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cachfe-hit != 'true'
       run: |
-        poetry install --no-interaction
+        poetry install --no-interaction --with dev
 
     - name: Linting pydantic_config_cascade and tests dirs with ruff
       run: |
