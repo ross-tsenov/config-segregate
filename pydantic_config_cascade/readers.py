@@ -1,5 +1,61 @@
 import json
 import yaml
-import xml
 import toml
-import inifile
+
+from pathlib import Path
+from typing import Any, Callable
+
+
+ReaderFunc = Callable[[Path], dict[str, Any]]
+
+reader_registry: dict[str, ReaderFunc] = dict()
+
+
+def register_reader(key: str, reader_func: ReaderFunc) -> None:
+    reader_registry[key] = reader_func
+
+
+def read_file(path_to_file: Path) -> dict[str, Any]:
+    if not path_to_file.exists():
+        raise FileNotFoundError(f"File `{path_to_file}` was not found.")
+
+    if not path_to_file.is_file():
+        raise IOError(f"`{path_to_file}` should be a file.")
+
+    file_extension = path_to_file.suffix
+
+    if file_extension not in reader_registry:
+        raise ValueError(
+            f"Does not support `{file_extension}` extension. "
+            "Consider implementing your own implementation and "
+            "registering using `register_reader` function."
+        )
+
+    return reader_registry[file_extension]([path_to_file])
+
+
+def read_json_file(path_to_file: Path) -> dict[str, Any]:
+    with open(path_to_file, "r") as json_file:
+        data = json.load(json_file)
+
+    return data
+
+
+def read_yaml_file(path_to_file: Path) -> dict[str, Any]:
+    with open(path_to_file, "r") as yaml_file:
+        data = yaml.safe_load(yaml_file)
+
+    return data
+
+
+def read_toml_file(path_to_file: Path) -> dict[str, Any]:
+    with open(path_to_file, "r") as toml_file:
+        data = toml.load(toml_file)
+
+    return data
+
+
+register_reader(".json", read_json_file)
+register_reader(".yml", read_yaml_file)
+register_reader(".yaml", read_yaml_file)
+register_reader(".toml", read_toml_file)
