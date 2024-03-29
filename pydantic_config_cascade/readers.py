@@ -3,19 +3,22 @@ import yaml
 import toml
 
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Dict, Union
+from os import PathLike
 
+ReaderFunc = Callable[[Path], Dict[str, Any]]
 
-ReaderFunc = Callable[[Path], dict[str, Any]]
-
-reader_registry: dict[str, ReaderFunc] = dict()
+READER_REGISTRY: Dict[str, ReaderFunc] = dict()
 
 
 def register_reader(key: str, reader_func: ReaderFunc) -> None:
-    reader_registry[key] = reader_func
+    READER_REGISTRY[key] = reader_func
 
 
-def read_file(path_to_file: Path) -> dict[str, Any]:
+def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
+    if not isinstance(path_to_file, Path):
+        path_to_file = Path(path_to_file)
+
     if not path_to_file.exists():
         raise FileNotFoundError(f"File `{path_to_file}` was not found.")
 
@@ -24,31 +27,31 @@ def read_file(path_to_file: Path) -> dict[str, Any]:
 
     file_extension = path_to_file.suffix
 
-    if file_extension not in reader_registry:
+    if file_extension not in READER_REGISTRY:
         raise ValueError(
             f"Does not support `{file_extension}` extension. "
             "Consider implementing your own implementation and "
             "registering using `register_reader` function."
         )
 
-    return reader_registry[file_extension]([path_to_file])
+    return READER_REGISTRY[file_extension](path_to_file)
 
 
-def read_json_file(path_to_file: Path) -> dict[str, Any]:
+def read_json_file(path_to_file: Path) -> Dict[str, Any]:
     with open(path_to_file, "r") as json_file:
         data = json.load(json_file)
 
     return data
 
 
-def read_yaml_file(path_to_file: Path) -> dict[str, Any]:
+def read_yaml_file(path_to_file: Path) -> Dict[str, Any]:
     with open(path_to_file, "r") as yaml_file:
         data = yaml.safe_load(yaml_file)
 
     return data
 
 
-def read_toml_file(path_to_file: Path) -> dict[str, Any]:
+def read_toml_file(path_to_file: Path) -> Dict[str, Any]:
     with open(path_to_file, "r") as toml_file:
         data = toml.load(toml_file)
 
