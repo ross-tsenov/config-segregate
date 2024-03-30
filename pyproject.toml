@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "pydantic-config-cascade"
+name = "config-cascade"
 version = "0.0.1"
-description = "Pydantic-Config-Cascade simplifies Config management with Pydantic, enabling efficient, customizable configurations through classifier-based loading."
+description = "Config-Cascade simplifies Config management by enabling efficient, customizable configurations through classifier-based loading."
 license = "MIT"
 authors = ["Ross Tsenov <ross.tsenov@github.com>"]
 maintainers = ["Ross Tsenov <ross.tsenov@github.com>"]
-repository = "https://github.com/ross-tsenov/pydantic-config-cascade"
-documentation = "https://github.com/ross-tsenov/pydantic-config-cascade/tree/main/docs/"
+repository = "https://github.com/ross-tsenov/config-cascade"
+documentation = "https://github.com/ross-tsenov/config-cascade/tree/main/docs/"
 readme = "README.md"
 include = [
-    "pydantic_config_cascade",
+    "config_cascade",
 ]
 exclude = [
     "docs/*",
@@ -19,7 +19,6 @@ exclude = [
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-pydantic-settings = "^2.0.3"
 toml = "^0.10.2"
 
 

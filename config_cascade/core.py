@@ -1,8 +1,6 @@
 from os import PathLike
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
-
-from pydantic import BaseModel
+from typing import Any, Dict, Union
 
 from .readers import read_file
 
@@ -25,7 +23,7 @@ def load_model_cascade(data: Dict[str, Any]) -> Dict[str, Any]:
     return data
 
 
-def update_nested_dict(data: Dict[str, Any], updates: Dict[str, Any]) -> Dict[str, Any]:
+def update_nested_dict(data: Dict[str, Any], updates: Any) -> Dict[str, Any]:
     if not isinstance(updates, dict):
         return updates
 
@@ -48,6 +46,7 @@ def load_base_config(data: Dict[str, Any], do_nested_update: bool = True) -> Dic
         return data
 
     base_data = read_file(data[BASE_CONFIG_KEY])
+    base_data = load_model_cascade(base_data)
 
     if do_nested_update:
         base_data = update_nested_dict(base_data, data)
@@ -57,11 +56,9 @@ def load_base_config(data: Dict[str, Any], do_nested_update: bool = True) -> Dic
     return base_data
 
 
-class BaseCascadeModel(BaseModel):
-    def __init__(self, path_to_file: Optional[Union[str, PathLike[str], Path]] = None, /, **data: Any) -> None:
-        if path_to_file is not None:
-            data = read_file(path_to_file)
+def load_config(path_to_file: Union[str, PathLike[str], Path], do_nested_update: bool = True) -> Dict[str, Any]:
+    data = read_file(path_to_file)
+    data = load_model_cascade(data)
+    data = load_base_config(data, do_nested_update)
 
-        data = load_model_cascade(data)
-        data = load_base_config(data, self.model_config.get("base_nested_update", True))  # type: ignore
-        super().__init__(**data)
+    return data

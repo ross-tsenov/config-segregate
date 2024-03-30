@@ -43,5 +43,5 @@ repos:
       entry: mypy
       language: python
       types_or: [python, pyi]
-      args: ["--ignore-missing-imports"]
+      args: ["--non-interactive", "--install-types", "--ignore-missing-imports"]
       require_serial: true
