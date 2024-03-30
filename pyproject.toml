@@ -19,8 +19,15 @@ exclude = [
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-toml = "^0.10.2"
+toml = {version = "^0.10.2", optional = true}
 
+[tool.poetry.extras]
+all = [
+    "toml",
+]
+toml = [
+    "toml",
+]
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.3.4"
