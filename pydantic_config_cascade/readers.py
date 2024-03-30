@@ -1,10 +1,10 @@
 import json
-import yaml
-import toml
-
+from os import PathLike
 from pathlib import Path
 from typing import Any, Callable, Dict, Union
-from os import PathLike
+
+import toml
+import yaml
 
 ReaderFunc = Callable[[Path], Dict[str, Any]]
 
@@ -23,7 +23,7 @@ def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
         raise FileNotFoundError(f"File `{path_to_file}` was not found.")
 
     if not path_to_file.is_file():
-        raise IOError(f"`{path_to_file}` should be a file.")
+        raise OSError(f"`{path_to_file}` should be a file.")
 
     file_extension = path_to_file.suffix
 
@@ -38,21 +38,21 @@ def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
 
 
 def read_json_file(path_to_file: Path) -> Dict[str, Any]:
-    with open(path_to_file, "r") as json_file:
+    with open(path_to_file) as json_file:
         data = json.load(json_file)
 
     return data
 
 
 def read_yaml_file(path_to_file: Path) -> Dict[str, Any]:
-    with open(path_to_file, "r") as yaml_file:
+    with open(path_to_file) as yaml_file:
         data = yaml.safe_load(yaml_file)
 
     return data
 
 
 def read_toml_file(path_to_file: Path) -> Dict[str, Any]:
-    with open(path_to_file, "r") as toml_file:
+    with open(path_to_file) as toml_file:
         data = toml.load(toml_file)
 
     return data
