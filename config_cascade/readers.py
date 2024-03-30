@@ -13,6 +13,13 @@ else:
     WITH_TOML = True
 
 
+__all__ = [
+    "ReaderFunc",
+    "register_reader",
+    "read_file",
+]
+
+
 ReaderFunc = Callable[[Path], Dict[str, Any]]
 
 READER_REGISTRY: Dict[str, ReaderFunc] = dict()
@@ -60,7 +67,7 @@ def read_yaml_file(path_to_file: Path) -> Dict[str, Any]:
 
 def read_toml_file(path_to_file: Path) -> Dict[str, Any]:
     if not WITH_TOML:
-        raise ModuleNotFoundError("Library `toml` is required to directly to work with toml files.")
+        raise ModuleNotFoundError("Library `toml` is required to directly work with toml files.")
 
     with open(path_to_file) as toml_file:
         data = toml.load(toml_file)
