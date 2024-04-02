@@ -41,7 +41,7 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cachfe-hit != 'true'
       run: |
-        poetry install --no-interaction --with dev
+        poetry install --extras "all" --no-interaction --with dev
 
     - name: Linting config_segregate and tests dirs with ruff
       run: |
