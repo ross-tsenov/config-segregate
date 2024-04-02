@@ -1,6 +1,6 @@
-site_name: Pydantic-Config-Cascade Documentation
-repo_url: https://github.com/ross-tsenov/pydantic-config-cascade
-repo_name: pydantic-config-cascade
+site_name: Config-Segregate Documentation
+repo_url: https://github.com/ross-tsenov/config-segregate
+repo_name: config-segregate
 theme:
   name: material
   language: en

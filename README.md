@@ -22,7 +22,7 @@ This Python Project Template is designed to streamline the development process, 
 - `docs/`: Holds MkDocs structured documentation, serving as the home for project documentation.
   - `docs/assets/`: Stores images and other assets for the documentation.
 - `scripts/`: Typically includes utility bash scripts.
-- `pydantic_config_cascade/`: The primary directory for project source code.
+- `config_segregate/`: The primary directory for project source code.
 - `tests/`: Contains test cases and fixtures for the project.
   - `tests/conftest.py`: Defines reusable pytest fixtures.
   - `tests/core`: Tests core functionalities like settings and logging.
@@ -59,7 +59,7 @@ Sure, here are the useful commands with code blocks for better readability:
 
   Run type checking:
   ```bash
-  mypy pydantic_config_cascade/ tests/
+  mypy config_segregate/ tests/
   ```
 
 - **Pytest Commands**

@@ -41,12 +41,12 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cachfe-hit != 'true'
       run: |
-        poetry install --no-interaction --with dev
+        poetry install --extras "all" --no-interaction --with dev
 
-    - name: Linting pydantic_config_cascade and tests dirs with ruff
+    - name: Linting config_segregate and tests dirs with ruff
       run: |
         source $VENV
-        poetry run ruff check pydantic_config_cascade tests
+        poetry run ruff check config_segregate tests
 
 
   typing:
@@ -81,12 +81,12 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: |
-        poetry install --no-interaction
+        poetry install --extras "all" --no-interaction
 
     - name: Static type checking with mypy
       run: |
         source $VENV
-        mypy --show-column-numbers --install-types --non-interactive pydantic_config_cascade tests
+        mypy --show-column-numbers --install-types --non-interactive config_segregate tests
 
 
   tests:
@@ -95,7 +95,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.11', '3.12']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
     steps:
     - uses: actions/checkout@v3
@@ -125,7 +125,7 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: |
-        poetry install --no-interaction
+        poetry install --extras "all" --no-interaction
 
     - name: Run PyTest
       run: |
