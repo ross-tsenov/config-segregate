@@ -14,10 +14,19 @@ __all__ = [
 PATH_PREFIX = r"${{"
 PATH_SUFFIX = r"}}"
 BASE_CONFIG_KEY = r"__base__"
+DO_NESTED_UPDATE_KEY = r"__do_nested_update__"
+REMOVE_KEYS_KEY = r"__remove_keys__"
 
 
 def update_nested_dict(data: Dict[str, Any], updates: Any) -> Dict[str, Any]:
     if not isinstance(updates, dict):
+        return updates
+
+    if REMOVE_KEYS_KEY in updates:
+        for remove_key in updates[REMOVE_KEYS_KEY]:
+            data.pop(remove_key)
+
+    if not updates.get(DO_NESTED_UPDATE_KEY, True):
         return updates
 
     for key, value in updates.items():
