@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import pytest
 
-from config_cascade import load_config
+from config_segregate import load_config
 
 
 def test_loading_and_parsing_of_json_configs(json_configs: Dict[str, Any]) -> None:

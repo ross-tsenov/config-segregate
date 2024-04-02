@@ -1,6 +1,6 @@
-site_name: Config-Cascade Documentation
-repo_url: https://github.com/ross-tsenov/config-cascade
-repo_name: config-cascade
+site_name: Config-Segregate Documentation
+repo_url: https://github.com/ross-tsenov/config-segregate
+repo_name: config-segregate
 theme:
   name: material
   language: en

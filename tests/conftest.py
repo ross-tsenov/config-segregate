@@ -5,7 +5,7 @@ from typing import Any, Dict, Literal
 
 import pytest
 
-from config_cascade import write_file
+from config_segregate import write_file
 
 SUPPORTED_FILE_FORMATS = ["json", "yaml", "yml", "toml"]
 SupportedFileFormats = Literal["json", "yaml", "yml", "toml", "random"]

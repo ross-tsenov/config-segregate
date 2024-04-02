@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "config-cascade"
+name = "config-segregate"
 version = "0.0.1"
-description = "Config-Cascade simplifies Config management by enabling efficient, customizable configurations through classifier-based loading."
+description = "Config-Segregate simplifies Config management by enabling efficient, customizable configurations through classifier-based loading."
 license = "MIT"
 authors = ["Ross Tsenov <ross.tsenov@github.com>"]
 maintainers = ["Ross Tsenov <ross.tsenov@github.com>"]
-repository = "https://github.com/ross-tsenov/config-cascade"
-documentation = "https://github.com/ross-tsenov/config-cascade/tree/main/docs/"
+repository = "https://github.com/ross-tsenov/config-segregate"
+documentation = "https://github.com/ross-tsenov/config-segregate/tree/main/docs/"
 readme = "README.md"
 include = [
-    "config_cascade",
+    "config_segregate",
 ]
 exclude = [
     "docs/*",

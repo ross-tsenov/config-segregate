@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-    "name": "config-cascade",
+    "name": "config-segregate",
     "context": "..",
     "dockerFile": "./Dockerfile",
 	"customizations": {
@@ -41,7 +41,7 @@
 	"overrideCommand": true,
 	"build": {
         "args": {
-            "PROJECT_NAME": "config-cascade"
+            "PROJECT_NAME": "config-segregate"
         }
     },
 	"onCreateCommand": "pre-commit install-hooks"

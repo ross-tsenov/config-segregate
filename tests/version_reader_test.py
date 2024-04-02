@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from config_cascade import get_version_from_pyproject
+from config_segregate import get_version_from_pyproject
 
 
 @pytest.fixture()
