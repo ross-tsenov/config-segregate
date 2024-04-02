@@ -34,7 +34,7 @@ def write_file(path_to_file: Union[str, PathLike[str], Path], data: Dict[str, An
         path_to_file = Path(path_to_file)
 
     if not path_to_file.parent.exists():
-        raise IOError("Missing folder.")
+        raise OSError("Missing folder.")
 
     if path_to_file.exists():
         raise FileExistsError(f"File `{path_to_file}` already exist.")
