@@ -1,6 +1,6 @@
 from os import PathLike
 from pathlib import Path
-from typing import Any, Dict, Union
+from typing import Any, Dict, Union, TypedDict, List, Hashable
 
 from .readers import read_file
 
@@ -14,20 +14,27 @@ __all__ = [
 PATH_PREFIX = r"${{"
 PATH_SUFFIX = r"}}"
 BASE_CONFIG_KEY = r"__base__"
-DO_NESTED_UPDATE_KEY = r"__do_nested_update__"
-REMOVE_KEYS_KEY = r"__remove_keys__"
+SEGREGATE_OPTIONS_KEY = r"__segregate_options__"
 
 
-def update_nested_dict(data: Dict[str, Any], updates: Any) -> Dict[str, Any]:
+class SegregateOptions(TypedDict):
+    disable_nested_update: bool
+    remove_keys: List[Hashable]
+
+
+def update_nested_dict(data: Dict[Hashable, Any], updates: Any) -> Dict[Hashable, Any]:
     if not isinstance(updates, dict):
         return updates
 
-    if REMOVE_KEYS_KEY in updates:
-        for remove_key in updates[REMOVE_KEYS_KEY]:
-            data.pop(remove_key)
+    segregate_options: SegregateOptions = updates.pop(SEGREGATE_OPTIONS_KEY, {})
 
-    if not updates.get(DO_NESTED_UPDATE_KEY, True):
+    for key_to_remove in segregate_options.get("remove_keys", []):
+        data.pop(key_to_remove, None)
+
+    if segregate_options.get("disable_nested_update", False):
         return updates
+
+    # TODO custom handlers go here.
 
     for key, value in updates.items():
         current_value = data.get(key)
@@ -40,20 +47,21 @@ def update_nested_dict(data: Dict[str, Any], updates: Any) -> Dict[str, Any]:
     return data
 
 
-def load_segregated_configs(data: Dict[str, Any]) -> Dict[str, Any]:
-    for key, value in data.items():
-        if isinstance(value, str) and value.startswith(PATH_PREFIX) and value.endswith(PATH_SUFFIX):
-            trimmed_path = value.removeprefix(PATH_PREFIX).removesuffix(PATH_SUFFIX).strip()
-            value = read_file(trimmed_path)
-            data[key] = value
+def load_segregated_configs(data: Any) -> Any:
+    if isinstance(data, str) and data.startswith(PATH_PREFIX) and data.endswith(PATH_SUFFIX):
+        trimmed_path = data.removeprefix(PATH_PREFIX).removesuffix(PATH_SUFFIX).strip()
+        return read_file(trimmed_path)
 
-        if isinstance(value, dict):
-            data[key] = load_segregated_configs(value)
+    elif isinstance(data, (list, tuple, set, frozenset)):
+        return [load_segregated_configs(item) for item in data]
+
+    if isinstance(data, dict):
+        return {key: load_segregated_configs(value) for key, value in data.items()}
 
     return data
 
 
-def load_base_config(data: Dict[str, Any]) -> Dict[str, Any]:
+def load_base_config(data: Dict[Hashable, Any]) -> Dict[Hashable, Any]:
     for key, value in data.items():
         if isinstance(value, dict):
             data[key] = load_base_config(value)
@@ -66,8 +74,8 @@ def load_base_config(data: Dict[str, Any]) -> Dict[str, Any]:
     return data
 
 
-def load_config(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
-    data = read_file(path_to_file)
+def load_config(path_to_file: Union[str, PathLike[str], Path]) -> Dict[Hashable, Any]:
+    data: Dict[str, Any] = read_file(path_to_file)
     data = load_segregated_configs(data)
     data = load_base_config(data)
 
