@@ -21,15 +21,40 @@ __all__ = [
 
 
 ReaderFunc = Callable[[Path], Dict[str, Any]]
+"""A type alias for reader functions, which take a `Path` and return a dictionary of parsed data."""
+
 
 READER_REGISTRY: Dict[str, ReaderFunc] = dict()
+"""A registry mapping file extensions to their corresponding reader functions."""
+
 
 
 def register_reader(key: str, reader_func: ReaderFunc) -> None:
+    """
+    Registers a new reader function for a specific file extension.
+
+    Args:
+        key (str): The file extension (including the leading dot) to associate with the reader function.
+        reader_func (ReaderFunc): The function that will handle reading and parsing files with the specified extension.
+    """
     READER_REGISTRY[key] = reader_func
 
 
 def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
+    """
+    Reads and parses a file based on its extension using the appropriate reader function.
+
+    Args:
+        path_to_file (Union[str, PathLike[str], Path]): The path to the file to be read.
+
+    Returns:
+        Dict[str, Any]: The parsed content of the file.
+
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+        OSError: If the specified path is not a file.
+        ValueError: If no reader function is registered for the file's extension.
+    """
     if not isinstance(path_to_file, Path):
         path_to_file = Path(path_to_file)
 
@@ -75,6 +100,7 @@ def read_toml_file(path_to_file: Path) -> Dict[str, Any]:
     return data
 
 
+# Registering default readers for common file extensions
 register_reader(".json", read_json_file)
 register_reader(".yml", read_yaml_file)
 register_reader(".yaml", read_yaml_file)

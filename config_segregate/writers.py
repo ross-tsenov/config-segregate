@@ -21,15 +21,36 @@ __all__ = [
 
 
 WriterFunc = Callable[[Path, Dict[str, Any]], None]
+"""A type alias for writer functions, which take a `Path` and a dictionary of data to write to the file."""
 
 WRITER_REGISTRY: Dict[str, WriterFunc] = dict()
+"""A registry mapping file extensions to their corresponding writer functions."""
 
 
 def register_writer(key: str, writer_func: WriterFunc) -> None:
+    """
+    Registers a new writer function for a specific file extension.
+
+    Args:
+        key (str): The file extension (including the leading dot) to associate with the writer function.
+        writer_func (WriterFunc): The function that will handle writing data to files with the specified extension.
+    """
     WRITER_REGISTRY[key] = writer_func
 
 
 def write_file(path_to_file: Union[str, PathLike[str], Path], data: Dict[str, Any]) -> None:
+    """
+    Writes data to a file based on its extension using the appropriate writer function.
+
+    Args:
+        path_to_file (Union[str, PathLike[str], Path]): The path to the file where data will be written.
+        data (Dict[str, Any]): The data to write to the file.
+
+    Raises:
+        OSError: If the parent directory does not exist.
+        FileExistsError: If the file already exists.
+        ValueError: If no writer function is registered for the file's extension.
+    """
     if not isinstance(path_to_file, Path):
         path_to_file = Path(path_to_file)
 
@@ -69,6 +90,7 @@ def write_toml_file(path_to_file: Path, data: Dict[str, Any]) -> None:
         toml.dump(data, toml_file)
 
 
+# Registering default writers for common file extensions
 register_writer(".json", write_json_file)
 register_writer(".yml", write_yaml_file)
 register_writer(".yaml", write_yaml_file)

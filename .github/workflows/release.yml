@@ -1,0 +1,88 @@
+name: Release on Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release_on_push_to_main:
+    runs-on: ubuntu-latest
+    env:
+      LIB_NAME: config_segregate
+      LIB_VERSION: 0.0
+      WHEEL_FILE_PATH: unknown
+      WHEEL_FILE: unknown
+      BUMP_RULE: patch
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ssh-key: ${{ secrets.BUMP_VERSION_BOT_KEY }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.8"
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: 1.7.1
+
+    - name: Determine version bump rule
+      run: |
+          COMMIT_MESSAGE=$(echo "${{ github.event.head_commit.message }}" | tr '[:upper:]' '[:lower:]')
+          if [[ "$COMMIT_MESSAGE" == *"[major]"* ]]; then
+            echo "BUMP_RULE=major" >> $GITHUB_ENV
+          elif [[ "$COMMIT_MESSAGE" == *"[minor]"* ]]; then
+            echo "BUMP_RULE=minor" >> $GITHUB_ENV
+          fi
+          
+    - name: Bump version and build wheel
+      run: |
+        LATEST_TAG=$(git describe --tags --abbrev=0)
+        poetry version ${LATEST_TAG:1}
+        poetry version ${{ env.BUMP_RULE }}
+        poetry build -f wheel
+
+    - name: Extract version
+      run: |
+        WHEEL_FILE_PATH=$(ls dist/*.whl)
+        WHEEL_FILE=$(basename $WHEEL_FILE_PATH)
+        echo "WHEEL_FILE_PATH=$WHEEL_FILE_PATH" >> $GITHUB_ENV
+        echo "WHEEL_FILE=$WHEEL_FILE" >> $GITHUB_ENV
+        VERSION=$(python -c "import re; import os; filename = os.path.basename('$WHEEL_FILE'); match = re.search('${LIB_NAME}-(.*?)-', filename); print(match.group(1) if match else 'unknown')")
+        echo "LIB_VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Commit & Push changes
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git add pyproject.toml
+        git commit --allow-empty -m "Automated version bump [${{ env.LIB_VERSION }}] [skip ci]"
+        git push
+
+    - name: Create a new release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.LIB_VERSION }}
+        release_name: Release v${{ env.LIB_VERSION }}
+        draft: false
+        prerelease: false
+
+    - name: Upload wheel to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./${{ env.WHEEL_FILE_PATH }}
+        asset_name: ${{ env.WHEEL_FILE }}
+        asset_content_type: application/octet-stream

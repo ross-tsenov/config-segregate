@@ -1,91 +1,77 @@
-# README for Python Project Template
+# Config-Segregate
 
-This Python Project Template is designed to streamline the development process, focusing on best practices, code quality, and documentation. It employs a variety of tooling and a structured folder layout to ensure maintainability and ease of use. Below is an overview of its key components, tooling, folder structure, and useful commands to get you started.
+Config-Segregate is a Python library that simplifies the management of complex configuration files. It allows you to split configurations into multiple files, use different formats (JSON, YAML, TOML), and apply updates to a base configuration, reducing redundancy and making it easier to manage large configurations.
 
-## Tooling
+## Features
 
-- [**Poetry**](https://github.com/python-poetry/poetry): Used for dependency management and packaging, making it simple to manage project libraries and their versions.
-- [**Pydantic Settings**](https://github.com/pydantic/pydantic-settings): Loads and validates settings from `.env` files, ensuring configurations are both accessible and correctly typed.
-- [**Ruff**](https://github.com/astral-sh/ruff): A fast and comprehensive linter that checks for syntax errors and enforces style consistency.
-- [**Mypy**](https://github.com/python/mypy): A static type checker for Python, enhancing code quality and detect errors before runtime.
-- [**Pytest**](https://github.com/pytest-dev/pytest): The go-to framework for writing and running tests, ensuring your code behaves as expected.
-- [**Pre-commit**](https://github.com/pre-commit/pre-commit): Runs a series of checks (linting, formatting, type checking) before each commit to maintain code quality.
-- [**MkDocs**](https://github.com/mkdocs/mkdocs): Generates project documentation from Markdown files, making it easy to create and maintain up-to-date documentation.
-- [**Simple Logger**](https://docs.python.org/3/library/logging.html): A basic logging implementation that can be easily customized and integrated throughout the project.
-- [**Devcontainer**](https://github.com/microsoft/vscode-dev-containers): Supports development inside a Docker container in VSCode or GitHub Codespaces, providing a consistent and isolated development environment.
-- [**GitHub Actions**](https://github.com/features/actions): Automates linting, type checking, and testing workflows, ensuring that code meets quality standards before merging.
+- **Modular Configurations**: Split your configuration into multiple files, each in a different format if needed.
+- **Base and Updates**: Define a base configuration and apply updates from other files on top of it, supporting nested updates.
+- **Support for JSON, YAML, and TOML**: Easily load configurations in multiple formats.
+- **Custom Readers**: Extend the library by registering custom reader functions for additional file formats.
+- **Segregation Options**: Control how configurations are merged, with options to disable nested updates or remove specific keys.
 
-## Folder Structure
+## Usage
 
-- `.devcontainer/`: Contains Docker configurations for the development environment, including a `Dockerfile` and `devcontainer.json` for container settings.
-- `.github/workflows/`: Stores CI configurations for automated linting, typing, and testing. It's extendable for additional workflows.
-- `docs/`: Holds MkDocs structured documentation, serving as the home for project documentation.
-  - `docs/assets/`: Stores images and other assets for the documentation.
-- `scripts/`: Typically includes utility bash scripts.
-- `config_segregate/`: The primary directory for project source code.
-- `tests/`: Contains test cases and fixtures for the project.
-  - `tests/conftest.py`: Defines reusable pytest fixtures.
-  - `tests/core`: Tests core functionalities like settings and logging.
-- `.gitignore`: Specifies intentionally untracked files to ignore.
-- `.pre-commit-config.yaml`: Configures checks to run before commits.
-- `main.py`: The entry point for running the application.
-- `mkdocs.yml`: Configuration for MkDocs.
-- `pyproject.toml`: Specifies project settings, dependencies, and build information.
+### Basic Example
 
-Sure, here are the useful commands with code blocks for better readability:
+Suppose you have a configuration file `main_config.json` that references a base configuration and another settings file:
 
-### Useful Commands
+```json
+{
+    "__base__": "${{ base_config.json }}",
+    "logging": {
+        "level": "DEBUG",
+        "settings": "${{ ./settings/settings.json }}" 
+    }
+}
+```
 
-- **Poetry Commands**
+You can load this configuration using the `load_config` function:
 
-  Install dependencies:
-  ```bash
-  poetry install [--with dev] [--with docs]
-  ```
+```python
+from config_loader import load_config
 
+config = load_config("path/to/main_config.json")
+print(config)
+```
 
-- **Pre-commit Commands**
+This will load the `main_config.json`, resolve the referenced paths, apply updates from the file on top of the base configuration, and return the final merged configuration as a Python dictionary.
 
-  Install pre-commit hooks:
-  ```bash
-  pre-commit install
-  ```
-  Run all pre-commit hooks:
-  ```bash
-  pre-commit run --all-files
-  ```
+### Segregation Options
 
-- **Mypy Commands**
+You can control how configurations are merged using the `__segregate_options__` key:
 
-  Run type checking:
-  ```bash
-  mypy config_segregate/ tests/
-  ```
+```json
+{
+    "__base__": "${{ base_config.json }}",
+    "__segregate_options__": {
+        "disable_nested_update": true,
+        "remove_keys": ["obsolete_key"]
+    },
+    "logging": {
+        "level": "DEBUG"
+    }
+}
+```
 
-- **Pytest Commands**
+### Custom Readers
 
-  Run tests:
-  ```bash
-  pytest tests
-  ```
+To add support for custom file formats, register a custom reader function:
 
-- **MkDocs Commands**
+```python
+from config_loader import register_reader
 
-  Serve documentation locally:
-  ```bash
-  mkdocs serve
-  ```
-  Build static site:
-  ```bash
-  mkdocs build
-  ```
+def read_custom_file(path_to_file):
+    with open(path_to_file) as custom_file:
+        data = custom_file.read()
+        # Process your custom data format here and return as a dictionary
+        return process_custom_data(data)
 
-- **Devcontainer Command**
+register_reader(".custom", read_custom_file)
+```
 
-  To use the devcontainer, if you are using VSCode, follow these steps:
-  - Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P` on macOS).
-  - Type and select "Remote-Containers: Open Folder in Container".
+Now, you can load `.custom` files just like any other supported format:
 
-  Alternatively, if you are using GitHub Codespaces, it will automatically use the `.devcontainer` configuration when you create a new codespace.
-
-This project template is equipped with a robust set of tools and a clear structure to help you start your Python project on the right foot. Adjust and extend it as needed to fit your project requirements.
+```python
+config = load_config("path/to/config.custom")
+```
