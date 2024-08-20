@@ -1,6 +1,6 @@
 from os import PathLike
 from pathlib import Path
-from typing import Any, Dict, Union, TypedDict, List, Hashable
+from typing import Any, Dict, Hashable, List, TypedDict, Union
 
 from .readers import read_file
 
@@ -50,13 +50,13 @@ def update_nested_dict(data: Dict[Hashable, Any], updates: Any) -> Dict[Hashable
 def load_segregated_configs(data: Any) -> Any:
     if isinstance(data, str) and data.startswith(PATH_PREFIX) and data.endswith(PATH_SUFFIX):
         trimmed_path = data.removeprefix(PATH_PREFIX).removesuffix(PATH_SUFFIX).strip()
-        return read_file(trimmed_path)
-
-    elif isinstance(data, (list, tuple, set, frozenset)):
-        return [load_segregated_configs(item) for item in data]
+        data = read_file(trimmed_path)
 
     if isinstance(data, dict):
         return {key: load_segregated_configs(value) for key, value in data.items()}
+
+    elif isinstance(data, (list, tuple, set, frozenset)):
+        return [load_segregated_configs(item) for item in data]
 
     return data
 

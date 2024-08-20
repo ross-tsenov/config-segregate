@@ -1,8 +1,8 @@
+from importlib.metadata import PackageNotFoundError, version
+
 from .core import *
 from .readers import *
 from .writers import *
-from importlib.metadata import version, PackageNotFoundError
-
 
 try:
     __version__ = version("config_segregate")
