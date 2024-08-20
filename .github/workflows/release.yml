@@ -9,7 +9,7 @@ jobs:
   release_on_push_to_main:
     runs-on: ubuntu-latest
     env:
-      LIB_NAME: config_segregate
+      LIB_NAME: config-segregate
       LIB_VERSION: 0.0
       WHEEL_FILE_PATH: unknown
       WHEEL_FILE: unknown
