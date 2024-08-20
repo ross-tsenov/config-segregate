@@ -56,7 +56,7 @@ FROM poetry as project-dev
 
 COPY --chown=vscode:vscode pyproject.toml poetry.lock* ./
 
-RUN poetry install --no-root --with dev --with docs
+RUN poetry install --all-extras --no-root --with dev --with docs
 
 WORKDIR /workspaces/${PROJECT_NAME}
 
