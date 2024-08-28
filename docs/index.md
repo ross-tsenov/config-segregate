@@ -5,28 +5,26 @@ hide:
 
 # Config-Segregate
 
-## Loading Configuration Files with Path References
-
 The `config-segregate` library is designed to help you manage and load configuration files that are split into multiple files, potentially using different formats (e.g., JSON, YAML, TOML). This modular approach allows you to separate different parts of your configuration into their own files. The library also provides the ability to define a "Base" configuration and apply "Updates" on top of it, reducing duplication and simplifying configuration management. Also, it works well with [Pydantic](https://pypi.org/project/pydantic/).
 
-### Key Features:
+## Key Features:
 
 - **Modular Configurations**: Configurations can be split across multiple files, each of which can be in a different format, as long as they can be loaded as Python dictionaries.
 - **Base and Updates**: You can define a base configuration and apply updates from other files on top of it. This approach supports nested updates, meaning that if the base contains nested dictionaries, the updates will not replace them entirely but will update them recursively.- **Support for JSON, YAML, and TOML**: Easily load configurations in multiple formats.
 - **Custom Readers**: Extend the library by registering custom reader functions for additional file formats.
 - **Segregation Options**: Control how configurations are merged, with options to disable nested updates or remove specific keys.
 
-### Requirements
+## Requirements
 
 Python 3.8+
 
-### Installation
+## Installation
 
 ```shell
 $ pip3 install config-segregate
 ```
 
-### Example
+## Example
 
 Suppose you have a configuration file `main_config.json` that references another file `base_config.json` and also includes settings from `settings.json`:
 
@@ -46,7 +44,7 @@ In this example:
 
 You can mix and match file formats (e.g., the base file can be JSON, while the settings file can be YAML) as long as they can be loaded as Python dictionaries.
 
-### Loading the Configuration
+## Loading the Configuration
 
 To load and resolve any references within your configuration file, use the `load_config` function:
 
@@ -63,7 +61,7 @@ This function will:
 - Apply updates from the file on top of the base configuration specified in the `__base__` key.
 - Return the final merged configuration as a Python dictionary.
 
-### TOML Support
+## TOML Support
 
 If you need to work with TOML files, you can optionally install the `toml` library by using the `toml` extra:
 
