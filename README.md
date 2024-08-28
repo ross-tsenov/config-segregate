@@ -1,6 +1,16 @@
+---
+
+[![Build Status](https://github.com/ross-tsenov/config-segregate/CI/badge.svg)](https://github.com/ross-tsenov/config-segregate/actions)
+[![PyPI version](https://badge.fury.io/py/config-segregate.svg)](https://pypi.python.org/pypi/config-segregate)
+[![Supported Python Version](https://img.shields.io/pypi/pyversions/config-segregate.svg?color=%2334D058)](https://pypi.python.org/pypi/config-segregate)
+
+**Documentation**: [https://github.com/ross-tsenov/config-segregate/tree/main/docs](https://github.com/ross-tsenov/config-segregate/tree/main/docs)
+
+---
+
 # Config-Segregate
 
-Config-Segregate is a Python library that simplifies the management of complex configuration files. It allows you to split configurations into multiple files, use different formats (JSON, YAML, TOML), and apply updates to a base configuration, reducing redundancy and making it easier to manage large configurations.
+Config-Segregate is a Python library that simplifies the management of complex configuration files. It allows you to split configurations into multiple files, use different formats (JSON, YAML, TOML), and apply updates to a base configuration, reducing redundancy and making it easier to manage large configurations. Also, it works well with [Pydantic](https://pypi.org/project/pydantic/).
 
 ## Features
 
@@ -9,6 +19,17 @@ Config-Segregate is a Python library that simplifies the management of complex c
 - **Support for JSON, YAML, and TOML**: Easily load configurations in multiple formats.
 - **Custom Readers**: Extend the library by registering custom reader functions for additional file formats.
 - **Segregation Options**: Control how configurations are merged, with options to disable nested updates or remove specific keys.
+
+## Requirements
+
+Python 3.8+
+
+## Installation
+
+```shell
+$ pip3 install config-segregate
+```
+
 
 ## Usage
 
