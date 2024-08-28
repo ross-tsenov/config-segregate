@@ -1,7 +1,7 @@
 import random
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, Dict, Literal
+from typing import Any, Dict, Hashable, Literal, cast
 
 import pytest
 
@@ -20,8 +20,14 @@ SEGREGATED_CONFIGS = {
         "settings": {"language": "English", "timezone": "UTC"},
         "services": {"database": "enabled", "cache": "disabled"},
     },
-    "{tmp_path}/link_1.{ext}": {"name": "LinkConfig1", "features": {"authentication": "oauth2", "logging": "verbose"}},
-    "{tmp_path}/link_2.{ext}": {"name": "LinkConfig2", "parameters": {"retry": 3, "timeout": 5000}},
+    "{tmp_path}/link_1.{ext}": {
+        "name": "LinkConfig1",
+        "features": {"authentication": "oauth2", "logging": "verbose"},
+    },
+    "{tmp_path}/link_2.{ext}": {
+        "name": "LinkConfig2",
+        "parameters": {"retry": 3, "timeout": 5000},
+    },
     "{tmp_path}/derived_1.{ext}": {
         "__base__": "${{ {tmp_path}/base.{ext} }}",
         "name": "DerivedConfig1",
@@ -30,7 +36,10 @@ SEGREGATED_CONFIGS = {
         "additional": "${{ {tmp_path}/link_1.{ext} }}",
         "further": "${{ {tmp_path}/link_2.{ext} }}",
     },
-    "{tmp_path}/link_3.{ext}": {"name": "LinkConfig3", "data": {"priority": "high", "mode": "active"}},
+    "{tmp_path}/link_3.{ext}": {
+        "name": "LinkConfig3",
+        "data": {"priority": "high", "mode": "active"},
+    },
     "{tmp_path}/link_4.{ext}": {
         "__base__": "${{ {tmp_path}/link_3.{ext} }}",
         "name": "LinkConfig4",
@@ -42,7 +51,10 @@ SEGREGATED_CONFIGS = {
         "__base__": "${{ {tmp_path}/derived_1.{ext} }}",
         "name": "DerivedConfig2",
         "settings": {"language": "Spanish"},
-        "additional_links": {"third": "${{ {tmp_path}/link_3.{ext} }}", "fourth": "${{ {tmp_path}/link_4.{ext} }}"},
+        "additional_links": {
+            "third": "${{ {tmp_path}/link_3.{ext} }}",
+            "fourth": "${{ {tmp_path}/link_4.{ext} }}",
+        },
     },
     "{tmp_path}/secrets_base.{ext}": {
         "name": "SecretsBase",
@@ -171,8 +183,14 @@ EXPECTED_CONFIGS = {
             "cache": "Memcached",
         },
         "links": {
-            "external": {"name": "ExternalLinkConfig", "parameters": {"timeout": 5000, "retry": 3}},
-            "internal_link": {"name": "InternalLinkConfig", "data": {"priority": "high", "mode": "active"}},
+            "external": {
+                "name": "ExternalLinkConfig",
+                "parameters": {"timeout": 5000, "retry": 3},
+            },
+            "internal_link": {
+                "name": "InternalLinkConfig",
+                "data": {"priority": "high", "mode": "active"},
+            },
             "backup_link": {
                 "name": "BackupLinkConfig",
                 "data": {
@@ -242,45 +260,45 @@ def prepare_configs(
 
 
 @pytest.fixture()
-def json_configs(tmp_path: Path) -> Dict[str, Any]:
+def json_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "json")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
-def yaml_configs(tmp_path: Path) -> Dict[str, Any]:
+def yaml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "yaml")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
-def yml_configs(tmp_path: Path) -> Dict[str, Any]:
+def yml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "yml")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
-def toml_configs(tmp_path: Path) -> Dict[str, Any]:
+def toml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "toml")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
-def random_configs(tmp_path: Path) -> Dict[str, Any]:
+def random_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "random")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)

@@ -1,7 +1,7 @@
 import json
 from os import PathLike
 from pathlib import Path
-from typing import Any, Callable, Dict, Union
+from typing import Any, Callable, Dict, Hashable, Union
 
 import yaml
 
@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 
-WriterFunc = Callable[[Path, Dict[str, Any]], None]
+WriterFunc = Callable[[Path, Dict[Hashable, Any]], None]
 """A type alias for writer functions, which take a `Path` and a dictionary of data to write to the file."""
 
 WRITER_REGISTRY: Dict[str, WriterFunc] = dict()
@@ -38,7 +38,7 @@ def register_writer(key: str, writer_func: WriterFunc) -> None:
     WRITER_REGISTRY[key] = writer_func
 
 
-def write_file(path_to_file: Union[str, PathLike[str], Path], data: Dict[str, Any]) -> None:
+def write_file(path_to_file: Union[str, PathLike[str], Path], data: Dict[Hashable, Any]) -> None:
     """
     Writes data to a file based on its extension using the appropriate writer function.
 
@@ -72,22 +72,22 @@ def write_file(path_to_file: Union[str, PathLike[str], Path], data: Dict[str, An
     return WRITER_REGISTRY[file_extension](path_to_file, data)
 
 
-def write_json_file(path_to_file: Path, data: Dict[str, Any]) -> None:
+def write_json_file(path_to_file: Path, data: Dict[Hashable, Any]) -> None:
     with open(path_to_file, "w") as json_file:
         json.dump(data, json_file)
 
 
-def write_yaml_file(path_to_file: Path, data: Dict[str, Any]) -> None:
+def write_yaml_file(path_to_file: Path, data: Dict[Hashable, Any]) -> None:
     with open(path_to_file, "w") as yaml_file:
         yaml.dump(data, yaml_file)
 
 
-def write_toml_file(path_to_file: Path, data: Dict[str, Any]) -> None:
+def write_toml_file(path_to_file: Path, data: Dict[Hashable, Any]) -> None:
     if not WITH_TOML:
         raise ModuleNotFoundError("Library `toml` is required to directly work with toml files.")
 
     with open(path_to_file, "w") as toml_file:
-        toml.dump(data, toml_file)
+        toml.dump(data, toml_file)  # type: ignore
 
 
 # Registering default writers for common file extensions

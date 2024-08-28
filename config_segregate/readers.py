@@ -1,7 +1,7 @@
 import json
 from os import PathLike
 from pathlib import Path
-from typing import Any, Callable, Dict, Union
+from typing import Any, Callable, Dict, Hashable, Union
 
 import yaml
 
@@ -20,13 +20,12 @@ __all__ = [
 ]
 
 
-ReaderFunc = Callable[[Path], Dict[str, Any]]
+ReaderFunc = Callable[[Path], Dict[Hashable, Any]]
 """A type alias for reader functions, which take a `Path` and return a dictionary of parsed data."""
 
 
 READER_REGISTRY: Dict[str, ReaderFunc] = dict()
 """A registry mapping file extensions to their corresponding reader functions."""
-
 
 
 def register_reader(key: str, reader_func: ReaderFunc) -> None:
@@ -40,7 +39,7 @@ def register_reader(key: str, reader_func: ReaderFunc) -> None:
     READER_REGISTRY[key] = reader_func
 
 
-def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
+def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[Hashable, Any]:
     """
     Reads and parses a file based on its extension using the appropriate reader function.
 
@@ -48,7 +47,7 @@ def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
         path_to_file (Union[str, PathLike[str], Path]): The path to the file to be read.
 
     Returns:
-        Dict[str, Any]: The parsed content of the file.
+        Dict[Hashable, Any]: The parsed content of the file.
 
     Raises:
         FileNotFoundError: If the specified file does not exist.
@@ -76,26 +75,26 @@ def read_file(path_to_file: Union[str, PathLike[str], Path]) -> Dict[str, Any]:
     return READER_REGISTRY[file_extension](path_to_file)
 
 
-def read_json_file(path_to_file: Path) -> Dict[str, Any]:
+def read_json_file(path_to_file: Path) -> Dict[Hashable, Any]:
     with open(path_to_file) as json_file:
-        data = json.load(json_file)
+        data: Dict[Hashable, Any] = json.load(json_file)
 
     return data
 
 
-def read_yaml_file(path_to_file: Path) -> Dict[str, Any]:
+def read_yaml_file(path_to_file: Path) -> Dict[Hashable, Any]:
     with open(path_to_file) as yaml_file:
-        data = yaml.safe_load(yaml_file)
+        data: Dict[Hashable, Any] = yaml.safe_load(yaml_file)
 
     return data
 
 
-def read_toml_file(path_to_file: Path) -> Dict[str, Any]:
+def read_toml_file(path_to_file: Path) -> Dict[Hashable, Any]:
     if not WITH_TOML:
         raise ModuleNotFoundError("Library `toml` is required to directly work with toml files.")
 
     with open(path_to_file) as toml_file:
-        data = toml.load(toml_file)
+        data: Dict[Hashable, Any] = toml.load(toml_file)  # type: ignore
 
     return data
 

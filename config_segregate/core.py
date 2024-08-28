@@ -28,7 +28,6 @@ SEGREGATE_OPTIONS_KEY = r"__segregate_options__"
 or updating the nested configuration data."""
 
 
-
 class SegregateOptions(TypedDict):
     disable_nested_update: bool
     """Flag to disable nested updates for this configuration."""
@@ -36,7 +35,7 @@ class SegregateOptions(TypedDict):
     """List of keys to be removed from the configuration during the update process."""
 
 
-def update_nested_dict(data: Dict[Hashable, Any], updates: Any) -> Dict[Hashable, Any]:
+def update_nested_dict(data: Dict[Hashable, Any], updates: Any) -> Any:
     """
     Recursively updates a nested dictionary with new values.
 
@@ -80,7 +79,9 @@ def load_segregated_configs(data: Any) -> Any:
         Any: The processed configuration data, with file paths loaded and nested structures updated.
     """
     if isinstance(data, str) and data.startswith(PATH_PREFIX) and data.endswith(PATH_SUFFIX):
-        trimmed_path = data.removeprefix(PATH_PREFIX).removesuffix(PATH_SUFFIX).strip()
+        data = data[len(PATH_PREFIX) :]
+        data = data[: -len(PATH_SUFFIX)]
+        trimmed_path = data.strip()
         data = read_file(trimmed_path)
 
     if isinstance(data, dict):
@@ -124,7 +125,7 @@ def load_config(path_to_file: Union[str, PathLike[str], Path]) -> Dict[Hashable,
     Returns:
         Dict[Hashable, Any]: The processed configuration dictionary.
     """
-    data: Dict[str, Any] = read_file(path_to_file)
+    data: Dict[Hashable, Any] = read_file(path_to_file)
     data = load_segregated_configs(data)
     data = load_base_config(data)
 

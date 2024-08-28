@@ -20,7 +20,6 @@ theme:
     - navigation.instant
     - content.code.annotate
 
-nav:
-  - Introduction: index.md
-  - Getting Started:
-    - Installation: getting_started/installation.md
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
