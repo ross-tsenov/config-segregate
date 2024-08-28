@@ -1,7 +1,7 @@
 import random
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, Dict, Hashable, Literal
+from typing import Any, Dict, Hashable, Literal, cast
 
 import pytest
 
@@ -208,8 +208,8 @@ EXPECTED_CONFIGS = {
 }
 
 
-def format_segregated_configs(configs: Dict[Hashable, Any], old_file_key: str, new_file_key: str) -> None:
-    def format_nested_path(config: Dict[Hashable, Any]) -> None:
+def format_segregated_configs(configs: Dict[str, Any], old_file_key: str, new_file_key: str) -> None:
+    def format_nested_path(config: Dict[str, Any]) -> None:
         for key, value in config.items():
             if isinstance(value, dict):
                 format_nested_path(value)
@@ -226,8 +226,8 @@ def format_segregated_configs(configs: Dict[Hashable, Any], old_file_key: str, n
 
 
 def format_configs(
-    segregated_configs: Dict[Hashable, Any],
-    expected_configs: Dict[Hashable, Any],
+    segregated_configs: Dict[str, Any],
+    expected_configs: Dict[str, Any],
     tmp_dir: Path,
     file_ext: SupportedFileFormats = "json",
 ) -> None:
@@ -242,14 +242,14 @@ def format_configs(
         format_segregated_configs(segregated_configs, old_file_key, new_file_key)
 
 
-def save_configs(configs: Dict[Hashable, Any]) -> None:
+def save_configs(configs: Dict[str, Any]) -> None:
     for path_to_config, data in configs.items():
         write_file(Path(path_to_config), data)
 
 
 def prepare_configs(
-    segregated_configs: Dict[Hashable, Any],
-    expected_configs: Dict[Hashable, Any],
+    segregated_configs: Dict[str, Any],
+    expected_configs: Dict[str, Any],
     tmp_dir: Path,
     file_ext: SupportedFileFormats = "json",
 ) -> None:
@@ -265,7 +265,7 @@ def json_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "json")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
@@ -274,7 +274,7 @@ def yaml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "yaml")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
@@ -283,7 +283,7 @@ def yml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "yml")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
@@ -292,7 +292,7 @@ def toml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "toml")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
 
 
 @pytest.fixture()
@@ -301,4 +301,4 @@ def random_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
     prepare_configs(segregated_configs, expected_configs, tmp_path, "random")
-    return expected_configs
+    return cast(Dict[Hashable, Any], expected_configs)
