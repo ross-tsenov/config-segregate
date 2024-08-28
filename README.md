@@ -21,7 +21,7 @@ Suppose you have a configuration file `main_config.json` that references a base 
     "__base__": "${{ base_config.json }}",
     "logging": {
         "level": "DEBUG",
-        "settings": "${{ ./settings/settings.json }}" 
+        "settings": "${{ ./settings/settings.json }}"
     }
 }
 ```

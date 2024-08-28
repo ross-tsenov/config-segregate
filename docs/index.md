@@ -18,7 +18,7 @@ Suppose you have a configuration file `main_config.json` that references another
     "__base__": "${{ base_config.json }}",
     "logging": {
         "level": "DEBUG",
-        "settings": "${{ ./settings/settings.json }}" 
+        "settings": "${{ ./settings/settings.json }}"
     }
 }
 ```
@@ -52,7 +52,7 @@ If you need to work with TOML files, you can optionally install the `toml` libra
 
 ```sh
 pip install config-segregate[toml]
-# or 
+# or
 pip install config-segregate[all]
 ```
 

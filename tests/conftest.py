@@ -1,7 +1,7 @@
 import random
 from copy import deepcopy
 from pathlib import Path
-from typing import Any, Dict, Literal
+from typing import Any, Dict, Hashable, Literal
 
 import pytest
 
@@ -20,8 +20,14 @@ SEGREGATED_CONFIGS = {
         "settings": {"language": "English", "timezone": "UTC"},
         "services": {"database": "enabled", "cache": "disabled"},
     },
-    "{tmp_path}/link_1.{ext}": {"name": "LinkConfig1", "features": {"authentication": "oauth2", "logging": "verbose"}},
-    "{tmp_path}/link_2.{ext}": {"name": "LinkConfig2", "parameters": {"retry": 3, "timeout": 5000}},
+    "{tmp_path}/link_1.{ext}": {
+        "name": "LinkConfig1",
+        "features": {"authentication": "oauth2", "logging": "verbose"},
+    },
+    "{tmp_path}/link_2.{ext}": {
+        "name": "LinkConfig2",
+        "parameters": {"retry": 3, "timeout": 5000},
+    },
     "{tmp_path}/derived_1.{ext}": {
         "__base__": "${{ {tmp_path}/base.{ext} }}",
         "name": "DerivedConfig1",
@@ -30,7 +36,10 @@ SEGREGATED_CONFIGS = {
         "additional": "${{ {tmp_path}/link_1.{ext} }}",
         "further": "${{ {tmp_path}/link_2.{ext} }}",
     },
-    "{tmp_path}/link_3.{ext}": {"name": "LinkConfig3", "data": {"priority": "high", "mode": "active"}},
+    "{tmp_path}/link_3.{ext}": {
+        "name": "LinkConfig3",
+        "data": {"priority": "high", "mode": "active"},
+    },
     "{tmp_path}/link_4.{ext}": {
         "__base__": "${{ {tmp_path}/link_3.{ext} }}",
         "name": "LinkConfig4",
@@ -42,7 +51,10 @@ SEGREGATED_CONFIGS = {
         "__base__": "${{ {tmp_path}/derived_1.{ext} }}",
         "name": "DerivedConfig2",
         "settings": {"language": "Spanish"},
-        "additional_links": {"third": "${{ {tmp_path}/link_3.{ext} }}", "fourth": "${{ {tmp_path}/link_4.{ext} }}"},
+        "additional_links": {
+            "third": "${{ {tmp_path}/link_3.{ext} }}",
+            "fourth": "${{ {tmp_path}/link_4.{ext} }}",
+        },
     },
     "{tmp_path}/secrets_base.{ext}": {
         "name": "SecretsBase",
@@ -171,8 +183,14 @@ EXPECTED_CONFIGS = {
             "cache": "Memcached",
         },
         "links": {
-            "external": {"name": "ExternalLinkConfig", "parameters": {"timeout": 5000, "retry": 3}},
-            "internal_link": {"name": "InternalLinkConfig", "data": {"priority": "high", "mode": "active"}},
+            "external": {
+                "name": "ExternalLinkConfig",
+                "parameters": {"timeout": 5000, "retry": 3},
+            },
+            "internal_link": {
+                "name": "InternalLinkConfig",
+                "data": {"priority": "high", "mode": "active"},
+            },
             "backup_link": {
                 "name": "BackupLinkConfig",
                 "data": {
@@ -190,8 +208,8 @@ EXPECTED_CONFIGS = {
 }
 
 
-def format_segregated_configs(configs: Dict[str, Any], old_file_key: str, new_file_key: str) -> None:
-    def format_nested_path(config: Dict[str, Any]) -> None:
+def format_segregated_configs(configs: Dict[Hashable, Any], old_file_key: str, new_file_key: str) -> None:
+    def format_nested_path(config: Dict[Hashable, Any]) -> None:
         for key, value in config.items():
             if isinstance(value, dict):
                 format_nested_path(value)
@@ -208,8 +226,8 @@ def format_segregated_configs(configs: Dict[str, Any], old_file_key: str, new_fi
 
 
 def format_configs(
-    segregated_configs: Dict[str, Any],
-    expected_configs: Dict[str, Any],
+    segregated_configs: Dict[Hashable, Any],
+    expected_configs: Dict[Hashable, Any],
     tmp_dir: Path,
     file_ext: SupportedFileFormats = "json",
 ) -> None:
@@ -224,14 +242,14 @@ def format_configs(
         format_segregated_configs(segregated_configs, old_file_key, new_file_key)
 
 
-def save_configs(configs: Dict[str, Any]) -> None:
+def save_configs(configs: Dict[Hashable, Any]) -> None:
     for path_to_config, data in configs.items():
         write_file(Path(path_to_config), data)
 
 
 def prepare_configs(
-    segregated_configs: Dict[str, Any],
-    expected_configs: Dict[str, Any],
+    segregated_configs: Dict[Hashable, Any],
+    expected_configs: Dict[Hashable, Any],
     tmp_dir: Path,
     file_ext: SupportedFileFormats = "json",
 ) -> None:
@@ -242,7 +260,7 @@ def prepare_configs(
 
 
 @pytest.fixture()
-def json_configs(tmp_path: Path) -> Dict[str, Any]:
+def json_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
@@ -251,7 +269,7 @@ def json_configs(tmp_path: Path) -> Dict[str, Any]:
 
 
 @pytest.fixture()
-def yaml_configs(tmp_path: Path) -> Dict[str, Any]:
+def yaml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
@@ -260,7 +278,7 @@ def yaml_configs(tmp_path: Path) -> Dict[str, Any]:
 
 
 @pytest.fixture()
-def yml_configs(tmp_path: Path) -> Dict[str, Any]:
+def yml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
@@ -269,7 +287,7 @@ def yml_configs(tmp_path: Path) -> Dict[str, Any]:
 
 
 @pytest.fixture()
-def toml_configs(tmp_path: Path) -> Dict[str, Any]:
+def toml_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
@@ -278,7 +296,7 @@ def toml_configs(tmp_path: Path) -> Dict[str, Any]:
 
 
 @pytest.fixture()
-def random_configs(tmp_path: Path) -> Dict[str, Any]:
+def random_configs(tmp_path: Path) -> Dict[Hashable, Any]:
     segregated_configs = deepcopy(SEGREGATED_CONFIGS)
     expected_configs = deepcopy(EXPECTED_CONFIGS)
 
