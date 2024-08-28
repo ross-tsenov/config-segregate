@@ -1,6 +1,6 @@
 ---
 
-[![Build Status](https://github.com/ross-tsenov/config-segregate/CI/badge.svg)](https://github.com/ross-tsenov/config-segregate/actions)
+[![Build Status](https://github.com/ross-tsenov/config-segregate/Test%20Everything/badge.svg)](https://github.com/ross-tsenov/config-segregate/actions)
 [![PyPI version](https://badge.fury.io/py/config-segregate.svg)](https://pypi.python.org/pypi/config-segregate)
 [![Supported Python Version](https://img.shields.io/pypi/pyversions/config-segregate.svg?color=%2334D058)](https://pypi.python.org/pypi/config-segregate)
 
