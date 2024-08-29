@@ -33,5 +33,6 @@ jobs:
 
       - name: Deploy GitHub Pages Docs
         run: |
-          poetry install --only docs
+          poetry install --only docs --no-interaction
+          source $VENV
           mkdocs gh-deploy
