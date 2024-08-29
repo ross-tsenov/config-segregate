@@ -11,7 +11,7 @@ jobs:
     runs-on: "ubuntu-latest"
 
     environment:
-      name: deploy
+      name: Deploy to PyPi and Github Pages
 
     steps:
       - uses: "actions/checkout@v4"
@@ -29,8 +29,9 @@ jobs:
       - name: Publish to PyPI & deploy docs
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-          poetry publish --build 
+          poetry publish --build
 
       - name: Deploy GitHub Pages Docs
         run: |
+          poetry install --only docs
           mkdocs gh-deploy
