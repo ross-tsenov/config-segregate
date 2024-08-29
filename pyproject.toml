@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "config-segregate"
-version = "0.0.4"
+version = "0.0.5"
 description = "Config-Segregate simplifies Config management by enabling efficient, customizable configurations through classifier-based loading."
 license = "MIT"
 authors = ["Ross Tsenov <ross.tsenov@github.com>"]
