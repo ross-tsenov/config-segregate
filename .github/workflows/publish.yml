@@ -1,9 +1,11 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - '*'
+  # push:
+  #   tags:
+  #     - '*'
+  pull_request:
+    branches: [ main ]
 
 jobs:
   publish:
