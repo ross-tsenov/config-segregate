@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "config-segregate"
-version = "0.1.0"
+version = "0.1.1"
 description = "Config-Segregate simplifies Config management by enabling efficient, customizable configurations through classifier-based loading."
 license = "MIT"
 authors = ["Ross Tsenov <ross.tsenov@github.com>"]
@@ -18,7 +18,7 @@ exclude = [
 
 
 [tool.poetry.dependencies]
-python = "^3.8.1"
+python = ">=3.8"
 toml = {version = "^0.10.2", optional = true}
 
 [tool.poetry.extras]
