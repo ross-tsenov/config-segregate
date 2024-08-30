@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     name: "Publish release"
@@ -35,8 +38,8 @@ jobs:
 
       - name: Deploy GitHub Pages Docs
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           poetry install --only docs --no-interaction
           source $VENV
           mkdocs gh-deploy --force
