@@ -1,9 +1,9 @@
 ---
 
+[![PyPI version](https://badge.fury.io/py/config-segregate.png)](https://pypi.org/project/config-segregate/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/config-segregate?color=%2334D058)](https://pypi.org/project/config-segregate/)
 [![Build Status](https://github.com/ross-tsenov/config-segregate/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ross-tsenov/config-segregate/actions/workflows/ci.yml)
-[![PyPI Version](https://badge.fury.io/py/config-segregate.svg)](https://pypi.python.org/pypi/config-segregate)
-[![Supported Python Version](https://img.shields.io/pypi/pyversions/config-segregate.svg?color=%2334D058)](https://pypi.python.org/pypi/config-segregate)
----
+
 ### **[Documentation](https://ross-tsenov.github.io/config-segregate/)**
 
 ---
