@@ -1,11 +1,9 @@
 name: Publish
 
 on:
-  # push:
-  #   tags:
-  #     - '*'
-  pull_request:
-    branches: [ main ]
+  push:
+    tags:
+      - '*'
 
 permissions:
   contents: write
@@ -31,10 +29,10 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      # - name: Publish to PyPI & deploy docs
-      #   run: |
-      #     poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-      #     poetry publish --build
+      - name: Publish to PyPI & deploy docs
+        run: |
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry publish --build
 
       - name: Deploy GitHub Pages Docs
         run: |
