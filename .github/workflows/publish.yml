@@ -34,7 +34,7 @@ jobs:
       - name: Deploy GitHub Pages Docs
         run: |
           git config user.name "GitHub Action"
-          git config user.email 'github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           poetry install --only docs --no-interaction
           source $VENV
           mkdocs gh-deploy --force
