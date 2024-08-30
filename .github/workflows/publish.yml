@@ -28,15 +28,15 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
 
-      - name: Publish to PyPI & deploy docs
-        run: |
-          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-          poetry publish --build
+      # - name: Publish to PyPI & deploy docs
+      #   run: |
+      #     poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+      #     poetry publish --build
 
       - name: Deploy GitHub Pages Docs
         run: |
           git config user.name "GitHub Action"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           poetry install --only docs --no-interaction
           source $VENV
           mkdocs gh-deploy --force
